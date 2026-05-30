@@ -9,7 +9,7 @@ public static class TrackerEngine
         Console.WriteLine("Type 'help' to see available commands or 'exit' to quit.");
         while (true)
         {
-            string userInputCommand = Services.UserInputService.GetUserInput();
+            string userInputCommand = UserInputService.GetUserInput();
             if (userInputCommand == "exit")
             {
                 break;
