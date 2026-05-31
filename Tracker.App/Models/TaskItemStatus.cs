@@ -1,6 +1,6 @@
 ﻿namespace Tracker.App.Models;
 
-public enum TaskStatus
+public enum TaskItemStatus
 {
     Todo,
     InProgress,

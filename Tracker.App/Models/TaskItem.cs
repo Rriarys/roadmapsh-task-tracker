@@ -1,10 +1,10 @@
 ﻿namespace Tracker.App.Models;
 
-internal class TaskItem
+public class TaskItem
 {
-    public static int Id { get; set; }
-    public static string Description { get; set; } = null!;
-    public static TaskStatus Status { get; set; }
-    public static DateTime CreatedAt { get; set; }
-    public static DateTime UpdatedAt { get; set; }
+    public int Id { get; set; }
+    public string Description { get; set; } = null!;
+    public TaskItemStatus Status { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }
