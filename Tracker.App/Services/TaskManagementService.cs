@@ -83,7 +83,7 @@ public static class TaskManagementService
     public static void MarkTaskInProgress(int taskId)
     {
         // th change only Status to InProgress, and update UpdatedAt field to the current time, and dont touch description and CreatedAt fields
-        var tasks = TaskLoader(true);
+        var tasks = TaskLoader();
         var task = tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null)
         {
@@ -99,7 +99,7 @@ public static class TaskManagementService
 
     public static void MarkTaskTodo(int taskId)
     {
-        var tasks = TaskLoader(true);
+        var tasks = TaskLoader();
         var task = tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null)
         {
@@ -115,7 +115,7 @@ public static class TaskManagementService
 
     public static void MarkTaskDone(int taskId)
     {
-        var tasks = TaskLoader(true);
+        var tasks = TaskLoader();
         var task = tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null)
         {
