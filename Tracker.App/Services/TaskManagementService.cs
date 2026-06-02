@@ -4,6 +4,22 @@ namespace Tracker.App.Services;
 
 public static class TaskManagementService
 {
+    public static List<TaskItem> TaskLoader(bool hideNotfoundMsg = false)
+    {
+        var tasks = TasksRepo.LoadTasksFromFile();
+
+        // if no tasks, print a message and return
+        if (!tasks.Any())
+        {
+            if (!hideNotfoundMsg) // hide this msg for non-listing operations like add, update, remove, mark, etc. to avoid confusion
+                Console.WriteLine("No tasks found.");
+
+            return new List<TaskItem>();
+        }
+
+        return tasks;
+    }
+
     public static void AddTask(string taskName)
     {
         if (string.IsNullOrWhiteSpace(taskName))
@@ -11,7 +27,7 @@ public static class TaskManagementService
             throw new ArgumentException("Task name cannot be empty.", nameof(taskName));
         }
 
-        var tasks = TasksRepo.LoadTasksFromFile();
+        var tasks = TaskLoader(true);
 
         int newId = tasks.Any() ? tasks.Max(t => t.Id) + 1 : 1; // id = max existing id + 1, or 1 if no tasks exist
 
@@ -32,34 +48,91 @@ public static class TaskManagementService
     }
 
     public static void UpdateTask(int taskId, string newTaskName)
-
     {
-        Console.WriteLine("moq UpdateTask: " + taskId + " -> " + newTaskName);
+        // to check if task exists, we can load all tasks and find the one with the given id, change its description and save the list back to the file, update the UpdatedAt field to the current time, and dont touch status and CreatedAt fields
+        var tasks = TaskLoader(true);
+        var task = tasks.FirstOrDefault(t => t.Id == taskId);
+        if (task == null)
+        {
+            Console.WriteLine($"Task with ID {taskId} not found.");
+            return;
+        }
+
+        task.Description = newTaskName.Trim();
+        task.UpdatedAt = DateTime.UtcNow;
+        TasksRepo.SaveTasksToFile(tasks);
+        Console.WriteLine($"Task updated: {task.Id} - {task.Description}");
     }
 
     public static void RemoveTask(int taskId)
     {
-        Console.WriteLine("moq RemoveTask: " + taskId);
+        // to check if task exists, we can load all tasks and find the one with the given id, remove it from the list and save the list back to the file
+        var tasks = TaskLoader(true);
+        var task = tasks.FirstOrDefault(t => t.Id == taskId);
+        if (task == null)
+        {
+            Console.WriteLine($"Task with ID {taskId} not found.");
+            return;
+        }
+
+        tasks.Remove(task);
+        TasksRepo.SaveTasksToFile(tasks);
+        Console.WriteLine($"Task removed: {task.Id} - {task.Description}");
     }
 
     public static void MarkTaskInProgress(int taskId)
     {
-        Console.WriteLine("moq MarkTaskInProgress: " + taskId);
+        // th change only Status to InProgress, and update UpdatedAt field to the current time, and dont touch description and CreatedAt fields
+        var tasks = TaskLoader(true);
+        var task = tasks.FirstOrDefault(t => t.Id == taskId);
+        if (task == null)
+        {
+            Console.WriteLine($"Task with ID {taskId} not found.");
+            return;
+        }
+
+        task.Status = TaskItemStatus.InProgress;
+        task.UpdatedAt = DateTime.UtcNow;
+        TasksRepo.SaveTasksToFile(tasks);
+        Console.WriteLine($"Task marked as InProgress: {task.Id} - {task.Description}");
     }
 
     public static void MarkTaskTodo(int taskId)
     {
-        Console.WriteLine("moq MarkTaskTodo: " + taskId);
+        var tasks = TaskLoader(true);
+        var task = tasks.FirstOrDefault(t => t.Id == taskId);
+        if (task == null)
+        {
+            Console.WriteLine($"Task with ID {taskId} not found.");
+            return;
+        }
+
+        task.Status = TaskItemStatus.Todo;
+        task.UpdatedAt = DateTime.UtcNow;
+        TasksRepo.SaveTasksToFile(tasks);
+        Console.WriteLine($"Task marked as Todo: {task.Id} - {task.Description}");
     }
 
     public static void MarkTaskDone(int taskId)
     {
-        Console.WriteLine("moq MarkTaskDone: " + taskId);
+        var tasks = TaskLoader(true);
+        var task = tasks.FirstOrDefault(t => t.Id == taskId);
+        if (task == null)
+        {
+            Console.WriteLine($"Task with ID {taskId} not found.");
+            return;
+        }
+
+        task.Status = TaskItemStatus.Done;
+        task.UpdatedAt = DateTime.UtcNow;
+        TasksRepo.SaveTasksToFile(tasks);
+        Console.WriteLine($"Task marked as Done: {task.Id} - {task.Description}");
     }
 
     public static void ListTasks()
     {
-        var tasks = TasksRepo.LoadTasksFromFile();
+        var tasks = TaskLoader();
+
         foreach (var task in tasks)
         {
             Console.WriteLine($"{task.Id} - {task.Description} [{task.Status}] {{CreatedAt: {task.CreatedAt}, UpdatedAt: {task.UpdatedAt}}}");
@@ -68,16 +141,28 @@ public static class TaskManagementService
 
     public static void ListDoneTasks()
     {
-        Console.WriteLine("moq ListDoneTasks");
+        var tasks = TaskLoader().Where(t => t.Status == TaskItemStatus.Done).ToList();
+        foreach (var task in tasks)
+        {
+            Console.WriteLine($"{task.Id} - {task.Description} [{task.Status}] {{CreatedAt: {task.CreatedAt}, UpdatedAt: {task.UpdatedAt}}}");
+        }
     }
 
     public static void ListTodoTasks()
     {
-        Console.WriteLine("moq ListTodoTasks");
+        var tasks = TaskLoader().Where(t => t.Status == TaskItemStatus.Todo).ToList();
+        foreach (var task in tasks)
+        {
+            Console.WriteLine($"{task.Id} - {task.Description} [{task.Status}] {{CreatedAt: {task.CreatedAt}, UpdatedAt: {task.UpdatedAt}}}");
+        }
     }
 
     public static void ListInProgressTasks()
     {
-        Console.WriteLine("moq ListInProgressTasks");
+        var tasks = TaskLoader().Where(t => t.Status == TaskItemStatus.InProgress).ToList();
+        foreach (var task in tasks)
+        {
+            Console.WriteLine($"{task.Id} - {task.Description} [{task.Status}] {{CreatedAt: {task.CreatedAt}, UpdatedAt: {task.UpdatedAt}}}");
+        }
     }
 }

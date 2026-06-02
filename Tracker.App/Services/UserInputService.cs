@@ -35,6 +35,7 @@ public static class UserInputService
                 Console.WriteLine("`list` -> List all tasks");
                 Console.WriteLine("`update` -> Update an existing task");
                 Console.WriteLine("`delete` -> Delete a task");
+                Console.WriteLine("`mark-todo` -> Mark a task as todo");
                 Console.WriteLine("`mark-in-progress` -> Mark a task as in progress");
                 Console.WriteLine("`mark-done` -> Mark a task as done");
                 Console.WriteLine("`list-done` -> Shows only completed tasks");
