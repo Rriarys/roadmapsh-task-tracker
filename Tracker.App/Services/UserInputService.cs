@@ -13,34 +13,38 @@ public static class UserInputService
             // Normalize and validate the user input
             if (string.IsNullOrEmpty(userInputCommand))
             {
-                Console.WriteLine("Command cannot be empty. Please try again.");
+                Console.WriteLine("Command cannot be empty. Type help to see available commands.");
                 continue;
             }
 
             if (userInputCommand.Length > MaxUserInputLength)
             {
-                Console.WriteLine($"Command cannot exceed {MaxUserInputLength} characters. Please try again.");
+                Console.WriteLine($"Command cannot exceed {MaxUserInputLength} characters. Type help to see available commands.");
                 continue;
             }
 
             if (userInputCommand == "exit")
             {
-                Console.WriteLine("Exiting the application...");
+                Console.WriteLine("Exiting application.");
                 return "exit";
             }
             else if (userInputCommand == "help")
             {
                 Console.WriteLine("Available commands:");
-                Console.WriteLine("`add` -> Add a new task");
-                Console.WriteLine("`list` -> List all tasks");
-                Console.WriteLine("`update` -> Update an existing task");
-                Console.WriteLine("`delete` -> Delete a task");
-                Console.WriteLine("`mark-todo` -> Mark a task as todo");
-                Console.WriteLine("`mark-in-progress` -> Mark a task as in progress");
-                Console.WriteLine("`mark-done` -> Mark a task as done");
-                Console.WriteLine("`list-done` -> Shows only completed tasks");
-                Console.WriteLine("`list-todo` -> Shows only pending tasks");
-                Console.WriteLine("`list-in-progress` -> Shows only tasks in progress");
+
+                Console.WriteLine($"  {"Command",-30} | {"Description"}");
+                Console.WriteLine(new string('-', 65));
+
+                Console.WriteLine($"  {"add <description>",-30} | Add a new task");
+                Console.WriteLine($"  {"list",-30} | Show all tasks");
+                Console.WriteLine($"  {"update <id> <description>",-30} | Update a task description");
+                Console.WriteLine($"  {"delete <id>",-30} | Delete a task");
+                Console.WriteLine($"  {"mark-todo <id>",-30} | Mark a task as todo");
+                Console.WriteLine($"  {"mark-in-progress <id>",-30} | Mark a task as in progress");
+                Console.WriteLine($"  {"mark-done <id>",-30} | Mark a task as done");
+                Console.WriteLine($"  {"list-done",-30} | Show completed tasks");
+                Console.WriteLine($"  {"list-todo",-30} | Show pending tasks");
+                Console.WriteLine($"  {"list-in-progress",-30} | Show tasks in progress");
                 continue;
             }
             else

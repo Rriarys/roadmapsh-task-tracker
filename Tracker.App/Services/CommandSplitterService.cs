@@ -7,13 +7,13 @@ public static class CommandSplitterService
 {
     private readonly static List<string> validCommands =
     [
-        "add", "list", "update", "delete", "mark-in-progress", "mark-done",
+        "add", "list", "update", "delete", "mark-todo", "mark-in-progress", "mark-done",
         "list-done", "list-todo", "list-in-progress"
     ];
 
     public static List<string>? Split(string userInputCommand)
     {
-        var matches = Regex.Matches(userInputCommand, @"\""([^""]+)\""|(\S+)"); // Match quoted strings or individual words
+        var matches = Regex.Matches(userInputCommand, @"\""([^""]*)\""|(\S+)"); // Match quoted strings or individual words
 
         List<string> splittedCommand = [];
 
