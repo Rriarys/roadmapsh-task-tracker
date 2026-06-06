@@ -25,7 +25,7 @@ public static class TasksRepo
         try
         {
             File.WriteAllText(filePath, "[]");
-            Console.WriteLine("Tasks list file created successfully at: " + filePath);
+            Console.WriteLine($"\nTasks list file created successfully at: {filePath} \n");
             return;
         }
         catch (Exception ex)
@@ -38,7 +38,7 @@ public static class TasksRepo
     {
         string filePath = GetFilePath();
         EnsureFileExists();
-        Console.WriteLine($"Tasks file path: {filePath}");
+        Console.WriteLine($"\nTasks file path: {filePath} \n");
 
         try
         {

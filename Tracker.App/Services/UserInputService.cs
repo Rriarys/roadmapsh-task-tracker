@@ -7,7 +7,7 @@ public static class UserInputService
         {
             const int MaxUserInputLength = 200;
 
-            Console.Write("Enter your command > ");
+            Console.Write("\nEnter your command > ");
             string? userInputCommand = Console.ReadLine()?.Trim().ToLower();
 
             // Normalize and validate the user input

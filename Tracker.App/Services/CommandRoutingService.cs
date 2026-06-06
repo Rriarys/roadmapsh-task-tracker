@@ -19,8 +19,8 @@ public static class CommandRoutingService
             return;
         }
 
-        Console.WriteLine(string.Join(", ", args));
-        Console.WriteLine(args.Count);
+        //Console.WriteLine(string.Join(", ", args)); // Debugging: Print the parsed arguments  
+        //Console.WriteLine(args.Count);
 
         if (args.Count == 1)
         {
