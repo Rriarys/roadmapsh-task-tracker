@@ -244,4 +244,3 @@ If you run the app from another directory, the file will be created there instea
 
 - This project uses only native .NET file system and JSON APIs
 - No external libraries are required for task storage
-- The project is intentionally small and educational
